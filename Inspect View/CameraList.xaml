@@ -1,0 +1,26 @@
+﻿<Window x:Class="Inspect_View.CameraList"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Inspect_View"
+        mc:Ignorable="d"
+        Title="Camera List" Height="450" Width="300">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="10*"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+
+        <ListBox x:Name="CameraListBox"/>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Label x:Name="MaxCamerasLabel" Content="Search for:" Height="30"/>
+            <TextBox x:Name="CameraSearchNumber" Text="1" Width="30" Height="20" PreviewTextInput="NumberValidationTextBox"/>
+
+            <Button x:Name="SearchCameras" Content="Search" HorizontalAlignment="Center" VerticalAlignment="Center" Click="searchCameras_Click"/>
+
+            <Button x:Name="ConnectCamera" Content="Connect" HorizontalAlignment="Center" VerticalAlignment="Center" Click="connectCamera_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>
