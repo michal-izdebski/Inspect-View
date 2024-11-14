@@ -10,13 +10,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="img\camera.png" />
-    <None Remove="img\circle.png" />
-    <None Remove="img\nok.png" />
-    <None Remove="img\ok.png" />
-    <None Remove="img\play.png" />
-    <None Remove="img\rectangle.png" />
-    <None Remove="img\test.png" />
+    <None Remove="Img\camera.png" />
+    <None Remove="Img\circle.png" />
+    <None Remove="Img\nok.png" />
+    <None Remove="Img\ok.png" />
+    <None Remove="Img\play.png" />
+    <None Remove="Img\rectangle.png" />
+    <None Remove="Img\test.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -29,26 +29,26 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="img\camera.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    <Resource Include="Img\camera.png">
+      <CopyToOutputDirectory></CopyToOutputDirectory>
     </Resource>
-    <Resource Include="img\circle.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    <Resource Include="Img\circle.png">
+      <CopyToOutputDirectory></CopyToOutputDirectory>
     </Resource>
-    <Resource Include="img\nok.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    <Resource Include="Img\nok.png">
+      <CopyToOutputDirectory></CopyToOutputDirectory>
     </Resource>
-    <Resource Include="img\ok.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    <Resource Include="Img\ok.png">
+      <CopyToOutputDirectory></CopyToOutputDirectory>
     </Resource>
-    <Resource Include="img\play.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    <Resource Include="Img\play.png">
+      <CopyToOutputDirectory></CopyToOutputDirectory>
     </Resource>
-    <Resource Include="img\rectangle.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    <Resource Include="Img\rectangle.png">
+      <CopyToOutputDirectory></CopyToOutputDirectory>
     </Resource>
-    <Resource Include="img\test.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    <Resource Include="Img\test.png">
+      <CopyToOutputDirectory></CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
 

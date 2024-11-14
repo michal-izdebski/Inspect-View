@@ -9,14 +9,17 @@ using System.Threading.Tasks;
 
 namespace Inspect_View
 {
-    public struct ColorMaskData
+    /// <summary>
+    /// Class used for holding inspection color data
+    /// </summary>
+    public class ColorMaskData
     {
-        public int redMin;
-        public int redMax;
-        public int greenMin;
-        public int greenMax;
-        public int blueMin;
-        public int blueMax;
+        public int redMin { get; set; }
+        public int redMax { get; set; }
+        public int greenMin { get; set; }
+        public int greenMax { get; set; }
+        public int blueMin { get; set; }
+        public int blueMax { get; set; }
 
         public ColorMaskData()
         {
@@ -36,6 +39,9 @@ namespace Inspect_View
         Blue
     }
 
+    /// <summary>
+    /// Struct used for holding data needed for calculation of standard deviation, while getting color data for selected limiter
+    /// </summary>
     public struct ColorStatistics
     {
         public double sum;
@@ -56,10 +62,15 @@ namespace Inspect_View
         }
     }
 
+    /// <summary>
+    /// Class holding all information about limiter
+    /// </summary>
     public class ImageInspectionLimiter
     {
+        /// <summary> Index counting amount of limiters added to project, used for creating limiter names </summary>
         public static int index = 0;
 
+        /// <summary> False if limiter is circle and true if it is rectangle </summary>
         public bool rectangle; //false - circle ; true - rectangle
         public bool isSelected;
         public int width;
@@ -133,11 +144,20 @@ namespace Inspect_View
         }
 
 
+        /// <summary>
+        /// Zero internal mask for limiter
+        /// </summary>
+        /// <param name="currentFrame">Current frame, needed for frame size (mask needs to be same size as frame)</param>
         public void ZeroMask(Mat currentFrame)
         {
             limiterMask = Mat.Zeros(currentFrame.Rows, currentFrame.Cols, Emgu.CV.CvEnum.DepthType.Cv8U, 3);
         }
 
+
+        /// <summary>
+        /// Recreate internal mask for limiter. This mask shows whitch pixels are inside limiter
+        /// </summary>
+        /// <param name="currentFrame">Current frame, needed for frame size (mask needs to be same size as frame)</param>
         public void RefreshMask(Mat currentFrame)
         {
             this.ZeroMask(currentFrame);
@@ -154,6 +174,12 @@ namespace Inspect_View
             }
         }
 
+        /// <summary>
+        /// Get statistics, for one color, from given frame
+        /// </summary>
+        /// <param name="currentFrame">Frame from whitch statistics are taken</param>
+        /// <param name="color">For whitch color to take statistics</param>
+        /// <returns></returns>
         public ColorStatistics GetColorStats(Mat currentFrame, Inspect_View.Color color)
         {
             double sum = 0;

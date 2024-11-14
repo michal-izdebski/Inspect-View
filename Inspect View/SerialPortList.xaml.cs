@@ -20,38 +20,55 @@ using Emgu.CV;
 namespace Inspect_View
 {
     /// <summary>
-    /// Logika interakcji dla klasy SerialPortList.xaml
+    /// Window for serial device selection. 
     /// </summary>
     public partial class SerialPortList : Window
     {
-        private MainWindow mainWindow;
+        /// <summary> ViewModel for main window </summary>
+        private MainWindowViewModel viewModel;
 
-        public SerialPortList(MainWindow mainWindow)
+        public SerialPortList(MainWindowViewModel viewModel)
         {
             InitializeComponent();
 
             GetPortList();
-            this.mainWindow = mainWindow;
+            this.viewModel = viewModel;
         }
 
+        /// <summary>
+        /// Button click event handler used for connecting to serial device selected on list
+        /// </summary>
+        /// <param name="sender">Object sending event</param>
+        /// <param name="e">Event arguments</param>
         private void ConnectPort_Click(object sender, RoutedEventArgs e)
         {
             if (PortListBox.SelectedIndex != -1)
             {
-                if (mainWindow.connectedPort != null && mainWindow.connectedPort.IsOpen) mainWindow.connectedPort.Close();
-                mainWindow.connectedPort = new()
+                if (viewModel.connectedPort != null && viewModel.connectedPort.IsOpen) viewModel.connectedPort.Close();
+                viewModel.connectedPort = new()
                 {
                     PortName = PortListBox.SelectedValue.ToString(),
-                    BaudRate = 9600
+                    BaudRate = 9600,
+
+                    ReadTimeout = 5000,
+                    WriteTimeout = 5000
                 };
 
-                mainWindow.connectedPort.Open();
+                viewModel.connectedPort.Open();
 
-                if(!mainWindow.connectedPort.IsOpen)
+                if(!viewModel.connectedPort.IsOpen)
                 {
                     MessageBox.Show(this, "Could not connect to selected COM port", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                 }
-                else this.Close();
+                else
+                {
+                    //Discard serial port buffer in case there are data there already
+                    viewModel.connectedPort.DiscardInBuffer();
+
+                    viewModel.connectedPort.DataReceived += viewModel.RecieveData;
+
+                    this.Close();
+                }
             }
         }
 
@@ -60,6 +77,9 @@ namespace Inspect_View
             GetPortList();
         }
 
+        /// <summary>
+        /// Refresh serial device list
+        /// </summary>
         private void GetPortList()
         {
             string[] ports = SerialPort.GetPortNames();

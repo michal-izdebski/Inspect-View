@@ -5,64 +5,67 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Inspect_View"
         mc:Ignorable="d"
-        Title="Inspect View" Height="450" Width="800" WindowStartupLocation="CenterScreen" WindowState="Maximized" Closing="Window_Closing" KeyUp="Window_KeyUp" MouseWheel="Window_MouseWheel">
+        Title="Inspect View" Height="450" Width="800" WindowStartupLocation="CenterScreen" WindowState="Maximized" KeyUp="Window_KeyUp">
     <DockPanel>
         <Menu x:Name="MenuBar" DockPanel.Dock="Top">
             <MenuItem x:Name="FileMenu" Header="_File">
-                <MenuItem x:Name="FileNew" Header="_New" Click="FileNew_Click"/>
-                <MenuItem x:Name="FileOpen" Header="_Open" Click="FileOpen_Click"/>
-                <MenuItem x:Name="FileSave" Header="_Save" Click="FileSave_Click"/>
-                <MenuItem x:Name="FileSaveAs" Header="_Save as..." Click="FileSaveAs_Click"/>
+                <MenuItem x:Name="FileNew" Header="_New" Command="{Binding NewFileCommand}"/>
+                <MenuItem x:Name="FileOpen" Header="_Open" Command="{Binding OpenFileCommand}"/>
+                <MenuItem x:Name="FileSave" Header="_Save" Command="{Binding SaveFileCommand}"/>
+                <MenuItem x:Name="FileSaveAs" Header="_Save as..." Command="{Binding SaveFileAsCommand}"/>
                 <Separator/>
-                <MenuItem x:Name="FileExit" Header="_Exit" Click="FileExit_Click"/>
+                <MenuItem x:Name="FileExit" Header="_Exit" Command="{Binding ProgramExitCommand}"/>
             </MenuItem>
 
             <MenuItem x:Name="ConnectionMenu" Header="_Connection">
-                <MenuItem x:Name="ConnectCamera" Header="_Connect Camera" Click="ConnectCamera_Click"/>
-                <MenuItem x:Name="ConnectSerialPort" Header="_Connect Serial Port" Click="ConnectSerialPort_Click"/>
+                <MenuItem x:Name="ConnectCamera" Header="_Connect Camera" Command="{Binding ConnectCameraCommand}"/>
+                <MenuItem x:Name="SerialPort" Header="_Serial Port">
+                    <MenuItem x:Name="ConnectSerialPort" Header="_Connect Serial Port" Command="{Binding ConnectSerialPortCommand}"/>
+                    <MenuItem x:Name="TestSerialPort" Header="_Test Connection" Command="{Binding TestSerialPortCommand}"/>
+                </MenuItem>
             </MenuItem>
         </Menu>
 
         <ToolBarTray DockPanel.Dock="Top">
             <ToolBar Height="40">
-                <Button x:Name="TakePhotoButton" Click="TakePhotoButton_Click">
-                    <Image Source="/img/camera.png"/>
+                <Button x:Name="TakePhotoButton" Command="{Binding ClickTakePhotoCommand}">
+                    <Image Source="/Img/camera.png"/>
                 </Button>
                 
                 <Separator/>
-                
-                <ToggleButton x:Name="ToolCircle" Click="ToolCircle_Click">
-                    <Image Source="/img/circle.png"/>
+
+                <ToggleButton x:Name="ToolCircle" IsChecked="{Binding circleTool}" Command="{Binding ClickCircleToolCommand}">
+                    <Image Source="/Img/circle.png"/>
                 </ToggleButton>
-                
-                <ToggleButton x:Name="ToolRectangle" Click="ToolRectangle_Click">
-                    <Image Source="/img/rectangle.png"/>
+
+                <ToggleButton x:Name="ToolRectangle" IsChecked="{Binding rectangleTool}" Command="{Binding ClickRectangleToolCommand}">
+                    <Image Source="/Img/rectangle.png"/>
                 </ToggleButton>
                 
                 <Separator/>
 
-                <Button x:Name="TestButton" Click="TestButton_Click">
-                    <Image Source="/img/test.png"/>
+                <Button x:Name="TestButton" Command="{Binding DoTestCommand}">
+                    <Image Source="/Img/test.png"/>
                 </Button>
-                <Image x:Name="NOK_OK" Source="/img/ok.png" HorizontalAlignment="Right"/>
+                <Image x:Name="NOK_OK" Source="{Binding NOK_OK_Icon}" HorizontalAlignment="Right"/>
 
                 <Separator/>
 
-                <ToggleButton x:Name="StartButton" Click="StartButton_Click">
-                    <Image Source="/img/play.png"/>
+                <ToggleButton x:Name="StartButton" IsChecked="{Binding inspectionStart}" Command="{Binding StartInspectionCommand}">
+                    <Image Source="/Img/play.png"/>
                 </ToggleButton>
             </ToolBar>
         </ToolBarTray>
 
-        <Grid>
+        <Grid x:Name="MainGrid">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="6*"/>
             </Grid.ColumnDefinitions>
 
             <!-- Color min/max sliders -->
-            <StackPanel x:Name="ColorDataPanel" Orientation="Vertical" IsEnabled="False">
-                <TextBox x:Name="ColorDataName" Text="Limiter #0" TextChanged="ColorDataName_TextChanged"/>
+            <StackPanel x:Name="ColorDataPanel" Orientation="Vertical" IsEnabled="{Binding colorDataPanel}">
+                <TextBox x:Name="ColorDataName" Text="{Binding limiterName}" TextChanged="ColorDataName_TextChanged"/>
 
                 <!-- Red color sliders -->
                 <Grid>
@@ -73,8 +76,8 @@
 
                     <StackPanel Orientation="Horizontal">
                         <Label Content="Red"/>
-                        <Label x:Name="RedMinLabel" Content="0" Grid.Column="0"/>
-                        <Label x:Name="RedMaxLabel" Content="0" Grid.Column="0"/>
+                        <Label x:Name="RedMinLabel" Content="{Binding redMinLabel}" Grid.Column="0"/>
+                        <Label x:Name="RedMaxLabel" Content="{Binding redMaxLabel}" Grid.Column="0"/>
                     </StackPanel>
                     
                     <Grid Grid.Row="1">
@@ -86,10 +89,10 @@
                         </Grid.ColumnDefinitions>
 
                         <Label Content="Min" Grid.Column="0"/>
-                        <Slider x:Name="RedMinSlider" Maximum="255" SmallChange="1" LargeChange="10" Grid.Column="1" ValueChanged="RedMinSlider_ValueChanged"/>
+                        <Slider x:Name="RedMinSlider" Value="{Binding colorMaskData.redMin}" ValueChanged="RedMinSlider_ValueChanged" Maximum="255" SmallChange="1" LargeChange="10" Grid.Column="1"/>
 
                         <Label Content="Max" Grid.Column="2"/>
-                        <Slider x:Name="RedMaxSlider" Maximum="255" SmallChange="1" LargeChange="10" Grid.Column="3" ValueChanged="RedMaxSlider_ValueChanged" Value="255"/>
+                        <Slider x:Name="RedMaxSlider" Value="{Binding colorMaskData.redMax}" ValueChanged="RedMaxSlider_ValueChanged" Maximum="255" SmallChange="1" LargeChange="10" Grid.Column="3"/>
                     </Grid>
                 </Grid>
 
@@ -102,8 +105,8 @@
 
                     <StackPanel Orientation="Horizontal">
                         <Label Content="Green"/>
-                        <Label x:Name="GreenMinLabel" Content="0" Grid.Column="0"/>
-                        <Label x:Name="GreenMaxLabel" Content="0" Grid.Column="0"/>
+                        <Label x:Name="GreenMinLabel" Content="{Binding greenMinLabel}" Grid.Column="0"/>
+                        <Label x:Name="GreenMaxLabel" Content="{Binding greenMaxLabel}" Grid.Column="0"/>
                     </StackPanel>
 
                     <Grid Grid.Row="1">
@@ -115,10 +118,10 @@
                         </Grid.ColumnDefinitions>
 
                         <Label Content="Min" Grid.Column="0"/>
-                        <Slider x:Name="GreenMinSlider" Maximum="255" SmallChange="1" LargeChange="10" Grid.Column="1" ValueChanged="GreenMinSlider_ValueChanged"/>
+                        <Slider x:Name="GreenMinSlider" Value="{Binding colorMaskData.greenMin}" ValueChanged="GreenMinSlider_ValueChanged" Maximum="255" SmallChange="1" LargeChange="10" Grid.Column="1"/>
 
                         <Label Content="Max" Grid.Column="2"/>
-                        <Slider x:Name="GreenMaxSlider" Maximum="255" SmallChange="1" LargeChange="10" Grid.Column="3" ValueChanged="GreenMaxSlider_ValueChanged" Value="255"/>
+                        <Slider x:Name="GreenMaxSlider" Value="{Binding colorMaskData.greenMax}" ValueChanged="GreenMaxSlider_ValueChanged" Maximum="255" SmallChange="1" LargeChange="10" Grid.Column="3"/>
                     </Grid>
                 </Grid>
 
@@ -131,8 +134,8 @@
 
                     <StackPanel Orientation="Horizontal">
                         <Label Content="Blue"/>
-                        <Label x:Name="BlueMinLabel" Content="0" Grid.Column="0"/>
-                        <Label x:Name="BlueMaxLabel" Content="0" Grid.Column="0"/>
+                        <Label x:Name="BlueMinLabel" Content="{Binding blueMinLabel}" Grid.Column="0"/>
+                        <Label x:Name="BlueMaxLabel" Content="{Binding blueMaxLabel}" Grid.Column="0"/>
                     </StackPanel>
 
                     <Grid Grid.Row="1">
@@ -144,20 +147,20 @@
                         </Grid.ColumnDefinitions>
 
                         <Label Content="Min" Grid.Column="0"/>
-                        <Slider x:Name="BlueMinSlider" Maximum="255" SmallChange="1" LargeChange="10" Grid.Column="1" ValueChanged="BlueMinSlider_ValueChanged"/>
+                        <Slider x:Name="BlueMinSlider" Value="{Binding colorMaskData.blueMin}" ValueChanged="BlueMinSlider_ValueChanged" Maximum="255" SmallChange="1" LargeChange="10" Grid.Column="1"/>
 
                         <Label Content="Max" Grid.Column="2"/>
-                        <Slider x:Name="BlueMaxSlider" Maximum="255" SmallChange="1" LargeChange="10" Grid.Column="3" ValueChanged="BlueMaxSlider_ValueChanged" Value="255"/>
+                        <Slider x:Name="BlueMaxSlider" Value="{Binding colorMaskData.blueMax}" ValueChanged="BlueMaxSlider_ValueChanged" Maximum="255" SmallChange="1" LargeChange="10" Grid.Column="3"/>
                     </Grid>
                 </Grid>
 
                 <Label Content="Pixel count"/>
-                <TextBox x:Name="PixelCountBox" PreviewTextInput="NumberValidationTextBox" LostFocus="PixelCountBox_LostFocus" Text="0" TextChanged="PixelCountBox_TextChanged"/>
+                <TextBox x:Name="PixelCountBox" PreviewTextInput="NumberValidationTextBox" LostFocus="PixelCountBox_LostFocus" Text="{Binding pixelCount}" TextChanged="PixelCountBox_TextChanged"/>
 
                 <Label Content="Pixel count delta"/>
-                <TextBox x:Name="PixelDeltaBox" PreviewTextInput="NumberValidationTextBox" LostFocus="PixelDeltaBox_LostFocus" Text="0" TextChanged="PixelDeltaBox_TextChanged"/>
+                <TextBox x:Name="PixelDeltaBox" PreviewTextInput="NumberValidationTextBox" LostFocus="PixelDeltaBox_LostFocus" Text="{Binding pixelCountDelta}" TextChanged="PixelDeltaBox_TextChanged"/>
 
-                <Button x:Name="GetColorData" Content="Get color data" Click="GetColorData_Click"/>
+                <Button x:Name="GetColorData" Content="Get color data" Command="{Binding GetColorDataCommand}"/>
 
             </StackPanel>
 
@@ -181,7 +184,7 @@
 
                         <Label Content="Camera View" Grid.Row="0"/>
                         <Separator Grid.Row="1"/>
-                        <Image x:Name="ViewImage" Grid.Row="2" MouseLeftButtonUp="ViewImage_MouseLeftButtonUp" MouseLeftButtonDown="ViewImage_MouseLeftButtonDown"/>
+                        <Image x:Name="ViewImage" Source="{Binding cameraView}" Grid.Row="2" MouseLeftButtonDown="ViewImage_MouseLeftButtonDown" MouseLeftButtonUp="ViewImage_MouseLeftButtonUp" MouseWheel="ViewImage_MouseWheel"/>
                     </Grid>
                 </Border>
 
@@ -193,9 +196,9 @@
                             <RowDefinition Height="1*"/>
                         </Grid.RowDefinitions>
 
-                        <Label Content="Masked Image" Grid.Row="0"/>
+                        <Label Content="Masked View" Grid.Row="0"/>
                         <Separator Grid.Row="1"/>
-                        <Image x:Name="MaskImage" Grid.Row="2"/>
+                        <Image x:Name="MaskImage" Source="{Binding maskedView}" Grid.Row="2"/>
                     </Grid>
                 </Border>
 
@@ -207,9 +210,12 @@
                             <RowDefinition Height="1*"/>
                         </Grid.RowDefinitions>
 
-                        <Label x:Name="LimiterMaskLabel" Content="Limiter Mask (0 pixels counted)" Grid.Row="0"/>
+                        <StackPanel Orientation="Horizontal">
+                            <Label x:Name="LimiterMaskLabel" Content="Limiter Masked View" Grid.Row="0"/>
+                            <Label x:Name="LimiterMaskPixelCount" Content="{Binding limiterMaskedViewPixelCount}" Grid.Row="0"/>
+                        </StackPanel>
                         <Separator Grid.Row="1"/>
-                        <Image x:Name="ViewLimiterMask" Grid.Row="2"/>
+                        <Image x:Name="ViewLimiterMask" Source="{Binding limiterMaskedView}" Grid.Row="2"/>
                     </Grid>
                 </Border>
 

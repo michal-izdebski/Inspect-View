@@ -18,9 +18,9 @@
             <Label x:Name="MaxCamerasLabel" Content="Search for:" Height="30"/>
             <TextBox x:Name="CameraSearchNumber" Text="1" Width="30" Height="20" PreviewTextInput="NumberValidationTextBox"/>
 
-            <Button x:Name="SearchCameras" Content="Search" HorizontalAlignment="Center" VerticalAlignment="Center" Click="searchCameras_Click"/>
+            <Button x:Name="SearchCameras" Content="Search" HorizontalAlignment="Center" VerticalAlignment="Center" Click="SearchCameras_Click"/>
 
-            <Button x:Name="ConnectCamera" Content="Connect" HorizontalAlignment="Center" VerticalAlignment="Center" Click="connectCamera_Click"/>
+            <Button x:Name="ConnectCamera" Content="Connect" HorizontalAlignment="Center" VerticalAlignment="Center" Click="ConnectCamera_Click"/>
         </StackPanel>
     </Grid>
 </Window>

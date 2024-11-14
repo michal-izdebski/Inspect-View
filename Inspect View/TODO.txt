@@ -1,0 +1,5 @@
+1. Catch camera and serial port connection exceptions
+2. Try to move mouse events from View to ViewModel
+3. Create better communication protocol (current one can be prone to data lose)
+4. Change "circle tool" name to "ellipse tool"
+5. Save limiter index while saving file
